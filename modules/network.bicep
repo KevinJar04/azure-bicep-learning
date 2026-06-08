@@ -1,12 +1,12 @@
 param location string
 param vnetName string
 param vnetAddressPrefix string
-param subnetName string
-param subnetAddressPrefix string
+param subnets array
 
 resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: vnetName
   location: location
+
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -16,13 +16,17 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   }
 }
 
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = {
-  name: subnetName
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-05-01' = [for subnetItem in subnets: {
+  name: subnetItem.name
   parent: vnet
+
   properties: {
-    addressPrefix: subnetAddressPrefix
+    addressPrefix: subnetItem.prefix
   }
-}
+}]
 
 output vnetId string = vnet.id
-output subnetId string = subnet.id
+
+output subnetIds array = [
+  for i in range(0, length(subnets)): subnet[i].id
+]

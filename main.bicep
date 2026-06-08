@@ -3,8 +3,7 @@ param storageName string
 
 param vnetName string
 param vnetAddressPrefix string
-param subnetName string
-param subnetAddressPrefix string
+param subnets array
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageName
@@ -24,10 +23,9 @@ module network './modules/network.bicep' = {
     location: location
     vnetName: vnetName
     vnetAddressPrefix: vnetAddressPrefix
-    subnetName: subnetName
-    subnetAddressPrefix: subnetAddressPrefix
+    subnets: subnets
   }
 }
 
 output vnetId string = network.outputs.vnetId
-output subnetId string = network.outputs.subnetId
+output subnetIds array = network.outputs.subnetIds
