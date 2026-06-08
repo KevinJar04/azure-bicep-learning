@@ -2,6 +2,10 @@ using '../main.bicep'
 
 param storageName = 'emakev123storage'
 
+// true = deploy storage account
+// false = skip storage deployment
+param deployStorage = false
+
 param vnetName = 'vnet-bicep-test'
 param vnetAddressPrefix = '10.10.0.0/16'
 
